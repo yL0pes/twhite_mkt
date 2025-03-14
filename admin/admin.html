@@ -9,22 +9,18 @@
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
-    <header class="bg-dark text-white p-3">
-        <nav class="navbar navbar-expand-lg navbar-dark">
-            <a class="navbar-brand" href="#">Admin Panel</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
-                </ul>
+    <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="#">Admin Panel</a>
+        <div class="profile-icon position-relative">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <div class="profile-options position-absolute bg-dark text-white p-2 rounded d-none">
+                <a href="#" class="d-block text-white">Login</a>
+                <a href="#" class="d-block text-white">Register</a>
             </div>
-        </nav>
+        </div>
     </header>
     <div class="d-flex">
         <aside class="sidebar bg-secondary text-white p-3">
-            <button class="toggle-btn btn btn-dark">&#9664;</button>
             <ul class="list-unstyled mt-3">
                 <li><a href="#" class="text-white d-flex align-items-center"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a></li>
                 <li><a href="#" class="text-white d-flex align-items-center"><i class="fas fa-users mr-2"></i> Users</a></li>
@@ -35,15 +31,200 @@
         <main class="content flex-grow-1 p-3">
             <h1>Welcome to the Admin Panel</h1>
             <p>Here you can manage all the settings and configurations of the website.</p>
-            <!-- ...future admin configuration options... -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">AÇÕES</h5>
+                                <div id="acoes-boards" class="list-group"></div>
+                                <button class="btn btn-outline-primary add-task-btn" data-category="acoes-boards">
+                                    <i class="fas fa-plus"></i> Adicionar um cartão
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">MARKETING</h5>
+                                <div id="marketing-boards" class="list-group"></div>
+                                <button class="btn btn-outline-primary add-task-btn" data-category="marketing-boards">
+                                    <i class="fas fa-plus"></i> Adicionar um cartão
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">R.H</h5>
+                                <div id="rh-boards" class="list-group"></div>
+                                <button class="btn btn-outline-primary add-task-btn" data-category="rh-boards">
+                                    <i class="fas fa-plus"></i> Adicionar um cartão
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">LOJA</h5>
+                                <div id="loja-boards" class="list-group"></div>
+                                <button class="btn btn-outline-primary add-task-btn" data-category="loja-boards">
+                                    <i class="fas fa-plus"></i> Adicionar um cartão
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
     <footer class="bg-dark text-white text-center p-3">
         <p>&copy; 2023 Admin Panel. All rights reserved.</p>
     </footer>
+
+    <!-- Modal for adding a new task -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaskModalLabel">Adicionar um cartão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="text-box">
+                            <div class="box-container">
+                                <textarea id="taskDescription" placeholder="Descreva a tarefa" style="width: 100%; height: 100%;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveTaskBtn">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="admin.js"></script>
+    <script>
+        document.querySelector('.profile-icon').addEventListener('mouseover', function() {
+            document.querySelector('.profile-options').classList.remove('d-none');
+        });
+        document.querySelector('.profile-icon').addEventListener('mouseout', function() {
+            document.querySelector('.profile-options').classList.add('d-none');
+        });
+
+        document.querySelectorAll('.add-task-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const categoryId = this.getAttribute('data-category');
+                document.getElementById('saveTaskBtn').setAttribute('data-category', categoryId);
+                $('#addTaskModal').modal('show');
+            });
+        });
+
+        document.getElementById('saveTaskBtn').addEventListener('click', function() {
+            const categoryId = this.getAttribute('data-category');
+            const taskDescription = document.getElementById('taskDescription').value;
+            if (taskDescription) {
+                console.log(`Adding task: ${taskDescription} to category: ${categoryId}`);
+                const taskItem = document.createElement('div');
+                taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                taskItem.innerHTML = `
+                    ${taskDescription}
+                    <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
+                `;
+                document.getElementById(categoryId).prepend(taskItem);
+                $('#addTaskModal').modal('hide');
+
+                taskItem.querySelector('.delete-task-btn').addEventListener('click', function() {
+                    console.log(`Removing task: ${taskDescription} from category: ${categoryId}`);
+                    taskItem.remove();
+                    removeTaskFromLocalStorage(categoryId, taskDescription);
+                });
+
+                // Update index.html
+                updateIndexHtml(categoryId, taskDescription);
+                saveTaskToLocalStorage(categoryId, taskDescription);
+            }
+        });
+
+        function updateIndexHtml(categoryId, taskDescription) {
+            console.log(`Updating index.html with task: ${taskDescription} for category: ${categoryId}`);
+            const categoryMap = {
+                'acoes-boards': 'acoes-card',
+                'marketing-boards': 'marketing-card',
+                'rh-boards': 'rh-card',
+                'loja-boards': 'loja-card'
+            };
+            const cardId = categoryMap[categoryId];
+            const cardElement = window.opener ? window.opener.document.getElementById(cardId) : null;
+            if (cardElement) {
+                const taskElement = document.createElement('div');
+                taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
+                taskElement.innerHTML = `
+                    ${taskDescription}
+                    <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
+                `;
+                cardElement.querySelector('.card2').appendChild(taskElement);
+
+                taskElement.querySelector('.delete-task-btn').addEventListener('click', function() {
+                    console.log(`Removing task: ${taskDescription} from index.html category: ${cardId}`);
+                    taskElement.remove();
+                    removeTaskFromLocalStorage(cardId, taskDescription);
+                });
+            } else {
+                console.error(`Unable to find card element for category: ${categoryId}`);
+            }
+        }
+
+        function saveTaskToLocalStorage(categoryId, taskDescription) {
+            console.log(`Saving task: ${taskDescription} to localStorage for category: ${categoryId}`);
+            const tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
+            tasks.push(taskDescription);
+            localStorage.setItem(categoryId, JSON.stringify(tasks));
+        }
+
+        function removeTaskFromLocalStorage(categoryId, taskDescription) {
+            console.log(`Removing task: ${taskDescription} from localStorage for category: ${categoryId}`);
+            let tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
+            tasks = tasks.filter(task => task !== taskDescription);
+            localStorage.setItem(categoryId, JSON.stringify(tasks));
+        }
+
+        // Load tasks from localStorage on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Admin page loaded');
+            const categories = ['acoes-boards', 'marketing-boards', 'rh-boards', 'loja-boards'];
+            categories.forEach(categoryId => {
+                console.log(`Loading tasks for category: ${categoryId}`);
+                const tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
+                const boardElement = document.getElementById(categoryId);
+                tasks.forEach(taskDescription => {
+                    console.log(`Adding task: ${taskDescription}`);
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    taskItem.innerHTML = `
+                        ${taskDescription}
+                        <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
+                    `;
+                    boardElement.prepend(taskItem);
+
+                    taskItem.querySelector('.delete-task-btn').addEventListener('click', function() {
+                        console.log(`Removing task: ${taskDescription}`);
+                        taskItem.remove();
+                        removeTaskFromLocalStorage(categoryId, taskDescription);
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
