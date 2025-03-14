@@ -1,197 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TWhite MKT</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- ...existing code... -->
+    <link rel="stylesheet" href="style.css">
+    <!-- ...existing code... -->
 </head>
 <body>
+    <!-- ...existing code... -->
     <div class="container">
-        <div class="left">
-            <h2>AÇÕES DE VENDAS</h2>
-            <h3>VENDAS DO DIA</h3>
-            <div class="locucao">
-                <h4>LOCUÇÃO</h4>
-                <p id="dia-semana-mes">[DIA DA SEMANA] [DIA e MÊS]</p>
-                <p id="nome-locutor1">Nome locutor 1</p>
-                <p id="produtos-locutor1">PRODUTOS - Rel | Pul | Pel | Game</p>
-                <p id="vendedor1-locutor1">VENDEDOR 1 - </p>
-                <p id="vendedor2-locutor1">VENDEDOR 2 - </p>
-                <p id="vendedor3-locutor1">VENDEDOR 3 - </p>
-                <p id="total-locutor1">TOTAL: </p>
-                <p id="dinheiro-vendedor1-locutor1">Dinheiro Vendedor 1 = </p>
-                <p id="dinheiro-vendedor2-locutor1">Dinheiro Vendedor 2 = </p>
-                <p id="dinheiro-vendedor3-locutor1">Dinheiro Vendedor 3 = </p>
-                <p id="pix-vendedor1-locutor1">Pix Vendedor 1 = </p>
-                <p id="pix-vendedor2-locutor1">Pix Vendedor 2 = </p>
+        <div class="column">
+            <div class="card">
+                <div class="card2"></div>
             </div>
-            <div class="locucao" id="locutor2" style="display: none;">
-                <p id="nome-locutor2">Nome locutor 2 [se houver]</p>
-                <p id="produtos-locutor2">PRODUTOS - Rel | Pul | Pel | Game</p>
-                <p id="vendedor1-locutor2">VENDEDOR 1 - </p>
-                <p id="vendedor2-locutor2">VENDEDOR 2 - </p>
-                <p id="vendedor3-locutor2">VENDEDOR 3 - </p>
-                <p id="total-locutor2">TOTAL: </p>
-                <p id="dinheiro-vendedor1-locutor2">Dinheiro Vendedor 1 = </p>
-                <p id="dinheiro-vendedor2-locutor2">Dinheiro Vendedor 2 = </p>
-                <p id="dinheiro-vendedor3-locutor2">Dinheiro Vendedor 3 = </p>
-                <p id="pix-vendedor1-locutor2">Pix Vendedor 1 = </p>
-                <p id="pix-vendedor2-locutor2">Pix Vendedor 2 = </p>
-            </div>
-            <div class="vendas-twhite-wave">
-                <h4>VENDAS TWHITE WAVE</h4>
-                <p id="ester">ESTER = </p>
-                <p id="sabrina">SABRINA = </p>
-                <p id="stefani">STEFANI = </p>
-                <p id="juliana">JULIANA = </p>
-                <p id="total-twhite-wave">TOTAL = </p>
+            <div class="card">
+                <div class="card2"></div>
             </div>
         </div>
-        <div class="right">
-            <h2>MARKETING</h2>
-            <p id="agenda-semana">AGENDA DA SEMANA</p>
-            <p id="videos-semana">VIDEOS DA SEMANA</p>
-            <p id="metricas-meta-business">MÉTRICAS META BUSINESS</p>
-        </div>
-        <div class="bottom-left">
-            <h2>R.H</h2>
-            <p id="informacoes-semana">INFORMAÇÔES DA SEMANA</p>
-        </div>
-        <div class="bottom-right">
-            <h2>INFORMAÇÕES LOJA</h2>
-            <p id="clientes-vendas">Clientes/Vendas [Dia/Mês]</p>
-            <p id="vendedor1-atendidos-vendas">Vendedor 1 [Atendidos]/[Vendas]</p>
-            <p id="total-vendas">Total de vendas = R$[total]</p>
-            <p id="coisas-para-serem-feitas">COISAS PARA SEREM FEITAS LOJA</p>
-        </div>
-    </div>
-    <button class="config-button" onclick="showConfig()">Configurar</button>
-
-    <div id="config-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeConfig()">&times;</span>
-            <div class="config-container">
-                <h1>Configuração TWhite MKT</h1>
-                <div class="category-selector">
-                    <button onclick="showCategory('locucao')">Locução</button>
-                    <button onclick="showCategory('vendas-twhite-wave')">Vendas TWhite Wave</button>
-                    <button onclick="showCategory('marketing')">Marketing</button>
-                    <button onclick="showCategory('rh')">R.H</button>
-                    <button onclick="showCategory('informacoes-loja')">Informações Loja</button>
-                </div>
-                <form id="config-form">
-                    <div id="locucao" class="category">
-                        <h2>Locução</h2>
-                        <div class="form-group">
-                            <label for="dia-semana">Dia da Semana:</label>
-                            <input type="text" id="dia-semana" name="dia-semana">
-                        </div>
-                        <div class="form-group">
-                            <label for="dia-mes">Dia e Mês:</label>
-                            <input type="text" id="dia-mes" name="dia-mes">
-                        </div>
-                        <div class="form-group">
-                            <label for="nome-locutor1">Nome Locutor 1:</label>
-                            <input type="text" id="nome-locutor1" name="nome-locutor1">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor1-locutor1">VENDEDOR 1 - Rel | Pul | Pel | Game:</label>
-                            <input type="text" id="vendedor1-locutor1" name="vendedor1-locutor1">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor2-locutor1">VENDEDOR 2 - Rel | Pul | Pel | Game:</label>
-                            <input type="text" id="vendedor2-locutor1" name="vendedor2-locutor1">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor3-locutor1">VENDEDOR 3 - Rel | Pul | Pel | Game:</label>
-                            <input type="text" id="vendedor3-locutor1" name="vendedor3-locutor1">
-                        </div>
-                        <div class="form-group">
-                            <label for="nome-locutor2">Nome Locutor 2:</label>
-                            <input type="text" id="nome-locutor2" name="nome-locutor2">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor1-locutor2">VENDEDOR 1 - Rel | Pul | Pel | Game:</label>
-                            <input type="text" id="vendedor1-locutor2" name="vendedor1-locutor2">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor2-locutor2">VENDEDOR 2 - Rel | Pul | Pel | Game:</label>
-                            <input type="text" id="vendedor2-locutor2" name="vendedor2-locutor2">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor3-locutor2">VENDEDOR 3 - Rel | Pul | Pel | Game:</label>
-                            <input type="text" id="vendedor3-locutor2" name="vendedor3-locutor2">
-                        </div>
-                        <div class="form-group">
-                            <label for="segundo-locutor">Segundo Locutor:</label>
-                            <input type="checkbox" id="segundo-locutor" name="segundo-locutor">
-                        </div>
-                    </div>
-                    <div id="vendas-twhite-wave" class="category" style="display: none;">
-                        <h2>Vendas TWhite Wave</h2>
-                        <div class="form-group">
-                            <label for="ester">ESTER:</label>
-                            <input type="text" id="ester" name="ester">
-                        </div>
-                        <div class="form-group">
-                            <label for="sabrina">SABRINA:</label>
-                            <input type="text" id="sabrina" name="sabrina">
-                        </div>
-                        <div class="form-group">
-                            <label for="stefani">STEFANI:</label>
-                            <input type="text" id="stefani" name="stefani">
-                        </div>
-                        <div class="form-group">
-                            <label for="juliana">JULIANA:</label>
-                            <input type="text" id="juliana" name="juliana">
-                        </div>
-                    </div>
-                    <div id="marketing" class="category" style="display: none;">
-                        <h2>Marketing</h2>
-                        <div class="form-group">
-                            <label for="agenda-semana">AGENDA DA SEMANA:</label>
-                            <input type="text" id="agenda-semana" name="agenda-semana">
-                        </div>
-                        <div class="form-group">
-                            <label for="videos-semana">VIDEOS DA SEMANA:</label>
-                            <input type="text" id="videos-semana" name="videos-semana">
-                        </div>
-                        <div class="form-group">
-                            <label for="metricas-meta-business">MÉTRICAS META BUSINESS:</label>
-                            <input type="text" id="metricas-meta-business" name="metricas-meta-business">
-                        </div>
-                    </div>
-                    <div id="rh" class="category" style="display: none;">
-                        <h2>R.H</h2>
-                        <div class="form-group">
-                            <label for="informacoes-semana">INFORMAÇÔES DA SEMANA:</label>
-                            <input type="text" id="informacoes-semana" name="informacoes-semana">
-                        </div>
-                    </div>
-                    <div id="informacoes-loja" class="category" style="display: none;">
-                        <h2>Informações Loja</h2>
-                        <div class="form-group">
-                            <label for="clientes-vendas">Clientes/Vendas [Dia/Mês]:</label>
-                            <input type="text" id="clientes-vendas" name="clientes-vendas">
-                        </div>
-                        <div class="form-group">
-                            <label for="vendedor1-atendidos-vendas">Vendedor 1 [Atendidos]/[Vendas]:</label>
-                            <input type="text" id="vendedor1-atendidos-vendas" name="vendedor1-atendidos-vendas">
-                        </div>
-                        <div class="form-group">
-                            <label for="total-vendas">Total de vendas:</label>
-                            <input type="text" id="total-vendas" name="total-vendas">
-                        </div>
-                        <div class="form-group">
-                            <label for="coisas-para-serem-feitas">COISAS PARA SEREM FEITAS LOJA:</label>
-                            <input type="text" id="coisas-para-serem-feitas" name="coisas-para-serem-feitas">
-                        </div>
-                    </div>
-                </form>
+        <div class="column">
+            <div class="card">
+                <div class="card2"></div>
+            </div>
+            <div class="card">
+                <div class="card2"></div>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <!-- ...existing code... -->
 </body>
 </html>

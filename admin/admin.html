@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <header class="bg-dark text-white p-3">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand" href="#">Admin Panel</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <div class="d-flex">
+        <aside class="sidebar bg-secondary text-white p-3">
+            <button class="toggle-btn btn btn-dark">&#9664;</button>
+            <ul class="list-unstyled mt-3">
+                <li><a href="#" class="text-white d-flex align-items-center"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a></li>
+                <li><a href="#" class="text-white d-flex align-items-center"><i class="fas fa-users mr-2"></i> Users</a></li>
+                <li><a href="#" class="text-white d-flex align-items-center"><i class="fas fa-cogs mr-2"></i> Settings</a></li>
+                <li><a href="#" class="text-white d-flex align-items-center"><i class="fas fa-chart-line mr-2"></i> Reports</a></li>
+            </ul>
+        </aside>
+        <main class="content flex-grow-1 p-3">
+            <h1>Welcome to the Admin Panel</h1>
+            <p>Here you can manage all the settings and configurations of the website.</p>
+            <!-- ...future admin configuration options... -->
+        </main>
+    </div>
+    <footer class="bg-dark text-white text-center p-3">
+        <p>&copy; 2023 Admin Panel. All rights reserved.</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
