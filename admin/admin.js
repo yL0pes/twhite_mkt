@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${taskDescription}
                 <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
             `;
-            boardElement.prepend(taskItem);
+            boardElement.appendChild(taskItem);
 
             taskItem.querySelector('.delete-task-btn').addEventListener('click', function() {
                 console.log(`Removing task: ${taskDescription}`);
