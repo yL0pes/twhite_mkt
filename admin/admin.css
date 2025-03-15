@@ -1,15 +1,16 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #E6EFE9;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9; /* Light background for better contrast */
     margin: 0;
     padding: 0;
-    color: #343a40;
+    color: #333;
 }
 
 header {
-    background-color: #8F8389;
+    background-color: #1f1f1f; /* Darker header for contrast */
     color: white;
-    padding: 10px 0;
+    padding: 15px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-icon {
@@ -49,13 +50,14 @@ nav ul li a {
 
 .sidebar {
     width: 60px;
-    background-color: #A7C4A0;
+    background-color: #2c2c2c; /* Darker sidebar for contrast */
     color: white;
     padding: 20px;
     height: calc(100vh - 56px);
     transition: width 0.3s;
     overflow: hidden;
     position: relative;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar:hover {
@@ -94,6 +96,10 @@ nav ul li a {
 .content {
     flex-grow: 1;
     padding: 20px;
+    background-color: #ffffff; /* White background for content area */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
 }
 
 .card {
@@ -105,26 +111,28 @@ nav ul li a {
 }
 
 .card-body {
-    padding: 15px;
+    padding: 20px;
 }
 
 .card-title {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #333;
 }
 
 footer {
-    background-color: #8F8389;
+    background-color: #1f1f1f; /* Darker footer for contrast */
     color: white;
     text-align: center;
-    padding: 10px 0;
+    padding: 15px 0;
     position: fixed;
     bottom: 0;
     width: 100%;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    color: #343a40;
+    color: #333;
 }
 
 /* Modal styles */
@@ -134,6 +142,14 @@ h1 {
     background-color: white;
     box-shadow: 0px 187px 75px rgba(0, 0, 0, 0.01), 0px 105px 63px rgba(0, 0, 0, 0.05), 0px 47px 47px rgba(0, 0, 0, 0.09), 0px 12px 26px rgba(0, 0, 0, 0.1), 0px 0px 0px rgba(0, 0, 0, 0.1);
     border-radius: 17px 17px 27px 27px;
+}
+
+.navbar-brand {
+    color: inherit;
+}
+
+.navbar-brand:hover {
+    color: inherit;
 }
 
 .text-box {
@@ -194,18 +210,141 @@ h1 {
     background-color: #026eda;
 }
 
-footer {
-    background-color: #8F8389;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+button.noselect {
+    width: 50px;
+    height: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+    background: #e62222;
 }
 
-h1 {
-    color: #343a40;
+button.noselect, button.noselect span {
+    transition: 200ms;
+}
+
+button.noselect .text {
+    transform: translateX(5px);
+    padding-right: 16px;
+    right: 10px;
+    font-size: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+button.noselect .icon {
+    position: absolute;
+    transform: translateX(110px);
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.noselect svg {
+    width: 15px;
+    fill: #eee;
+}
+
+button.noselect:hover {
+    background: #ff3636;
+}
+
+button.noselect:hover .text {
+    color: transparent;
+}
+
+button.noselect:hover .icon {
+    width: 40px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+button.noselect:focus {
+    outline: none;
+}
+
+button.noselect:active .icon svg {
+    transform: scale(0.8);
+}
+
+/* From Uiverse.io by xopc333 */
+.button {
+  display: block;
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin: 0;
+  overflow: hidden;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: 0;
+}
+
+.button:before,
+.button:after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  inset: 7px;
+}
+
+.button:before {
+  border: 4px solid #f0eeef;
+  transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+
+.button:after {
+  border: 4px solid #96daf0;
+  transform: scale(1.3);
+  transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+}
+
+.button:hover:before,
+.button:focus:before {
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.button:hover:after,
+.button:focus:after {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+
+.button-box {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.button-elem {
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: 17px 18px 0 18px;
+  transform: rotate(180deg);
+  fill: #f0eeef;
+}
+
+.button:hover .button-box,
+.button:focus .button-box {
+  transition: 0.4s;
+  transform: translateX(-56px);
 }
 
 /* ...future admin styles... */

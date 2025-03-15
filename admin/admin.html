@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Painel Admin</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
     <header class="bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-        <a class="navbar-brand" href="#">Admin Panel</a>
+        <a class="navbar-brand" href="#">Painel Administrativo</a>
         <div class="profile-icon position-relative">
             <i class="fas fa-user-circle fa-2x"></i>
             <div class="profile-options position-absolute bg-dark text-white p-2 rounded d-none">
@@ -31,7 +31,20 @@
         <main class="content flex-grow-1 p-3">
             <h1>Welcome to the Admin Panel</h1>
             <p>Here you can manage all the settings and configurations of the website.</p>
-            <button class="btn btn-primary" onclick="window.location.href='index.html'">Go to Index</button>
+            <button class="button" onclick="window.location.href='index.html'">
+                <div class="button-box">
+                    <span class="button-elem">
+                        <svg viewBox="0 0 46 40" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9z"></path>
+                        </svg>
+                    </span>
+                    <span class="button-elem">
+                        <svg viewBox="0 0 46 40">
+                            <path d="M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9z"></path>
+                        </svg>
+                    </span>
+                </div>
+            </button>
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
@@ -82,9 +95,6 @@
             </div>
         </main>
     </div>
-    <footer class="bg-dark text-white text-center p-3">
-        <p>&copy; 2023 Admin Panel. All rights reserved.</p>
-    </footer>
 
     <!-- Modal for adding a new task -->
     <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
@@ -131,32 +141,6 @@
             });
         });
 
-        document.getElementById('saveTaskBtn').addEventListener('click', function() {
-            const categoryId = this.getAttribute('data-category');
-            const taskDescription = document.getElementById('taskDescription').value;
-            if (taskDescription) {
-                console.log(`Adding task: ${taskDescription} to category: ${categoryId}`);
-                const taskItem = document.createElement('div');
-                taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                taskItem.innerHTML = `
-                    ${taskDescription}
-                    <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
-                `;
-                document.getElementById(categoryId).prepend(taskItem);
-                $('#addTaskModal').modal('hide');
-
-                taskItem.querySelector('.delete-task-btn').addEventListener('click', function() {
-                    console.log(`Removing task: ${taskDescription} from category: ${categoryId}`);
-                    taskItem.remove();
-                    removeTaskFromLocalStorage(categoryId, taskDescription);
-                });
-
-                // Update index.html
-                updateIndexHtml(categoryId, taskDescription);
-                saveTaskToLocalStorage(categoryId, taskDescription);
-            }
-        });
-
         function updateIndexHtml(categoryId, taskDescription) {
             console.log(`Updating index.html with task: ${taskDescription} for category: ${categoryId}`);
             const categoryMap = {
@@ -172,11 +156,11 @@
                 taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
                 taskElement.innerHTML = `
                     ${taskDescription}
-                    <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
+                    <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
                 `;
                 cardElement.querySelector('.card2').appendChild(taskElement);
 
-                taskElement.querySelector('.delete-task-btn').addEventListener('click', function() {
+                taskElement.querySelector('.noselect').addEventListener('click', function() {
                     console.log(`Removing task: ${taskDescription} from index.html category: ${cardId}`);
                     taskElement.remove();
                     removeTaskFromLocalStorage(cardId, taskDescription);
@@ -214,11 +198,11 @@
                     taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
                     taskItem.innerHTML = `
                         ${taskDescription}
-                        <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
+                        <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
                     `;
                     boardElement.prepend(taskItem);
 
-                    taskItem.querySelector('.delete-task-btn').addEventListener('click', function() {
+                    taskItem.querySelector('.noselect').addEventListener('click', function() {
                         console.log(`Removing task: ${taskDescription}`);
                         taskItem.remove();
                         removeTaskFromLocalStorage(categoryId, taskDescription);
