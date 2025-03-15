@@ -1,6 +1,7 @@
 /* From Uiverse.io by Tiagoadag */
 body {
-    background-color: #211B15;
+    background-color: #f4f4f9;
+    font-family: 'Roboto', sans-serif;
 }
 
 .card {
@@ -39,4 +40,27 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+}
+
+.new-card {
+    width: 300px;
+    height: 200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.new-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.new-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
 }

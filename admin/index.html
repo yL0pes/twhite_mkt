@@ -123,5 +123,41 @@
     </div>
     <!-- ...existing code... -->
     <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/load_tasks')
+                .then(response => response.json())
+                .then(tasks => {
+                    const categoryMap = {
+                        'acoes-boards': 'acoes-card',
+                        'marketing-boards': 'marketing-card',
+                        'rh-boards': 'rh-card',
+                        'loja-boards': 'loja-card'
+                    };
+                    for (const [categoryId, taskDescriptions] of Object.entries(tasks)) {
+                        const cardId = categoryMap[categoryId];
+                        const cardElement = document.getElementById(cardId);
+                        if (cardElement) {
+                            taskDescriptions.forEach(taskDescription => {
+                                const taskElement = document.createElement('div');
+                                taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
+                                taskElement.innerHTML = `
+                                    ${taskDescription}
+                                    <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                                `;
+                                cardElement.querySelector('.card2').appendChild(taskElement);
+
+                                taskElement.querySelector('.noselect').addEventListener('click', function() {
+                                    console.log(`Removing task: ${taskDescription}`);
+                                    taskElement.remove();
+                                    removeTaskFromLocalStorage(categoryId, taskDescription);
+                                });
+                            });
+                        }
+                    }
+                })
+                .catch(error => console.error('Error loading tasks:', error));
+        });
+    </script>
 </body>
 </html>

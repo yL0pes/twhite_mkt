@@ -15,31 +15,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Load tasks from localStorage on page load
-    const categories = ['acoes-boards', 'marketing-boards', 'rh-boards', 'loja-boards'];
-    categories.forEach(categoryId => {
-        console.log(`Loading tasks for category: ${categoryId}`);
-        const tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
-        const boardElement = document.getElementById(categoryId);
-        tasks.forEach(taskDescription => {
-            if (!boardElement.querySelector(`.list-group-item:contains("${taskDescription}")`)) {
-                console.log(`Adding task: ${taskDescription}`);
-                const taskItem = document.createElement('div');
-                taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                taskItem.innerHTML = `
-                    ${taskDescription}
-                    <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
-                `;
-                boardElement.appendChild(taskItem);
+    // Load tasks from backend on page load
+    fetch('/load_tasks')
+        .then(response => response.json())
+        .then(tasks => {
+            const categories = ['acoes-boards', 'marketing-boards', 'rh-boards', 'loja-boards'];
+            categories.forEach(categoryId => {
+                const boardElement = document.getElementById(categoryId);
+                if (tasks[categoryId]) {
+                    tasks[categoryId].forEach(taskDescription => {
+                        const taskItem = document.createElement('div');
+                        taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        taskItem.innerHTML = `
+                            ${taskDescription}
+                            <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                        `;
+                        boardElement.appendChild(taskItem);
 
-                taskItem.querySelector('.noselect').addEventListener('click', function() {
-                    console.log(`Removing task: ${taskDescription}`);
-                    taskItem.remove();
-                    removeTaskFromLocalStorage(categoryId, taskDescription);
-                });
-            }
-        });
-    });
+                        taskItem.querySelector('.noselect').addEventListener('click', function() {
+                            console.log(`Removing task: ${taskDescription}`);
+                            taskItem.remove();
+                            removeTaskFromLocalStorage(categoryId, taskDescription);
+                        });
+                    });
+                }
+            });
+        })
+        .catch(error => console.error('Error loading tasks:', error));
 });
 
 document.getElementById('saveTaskBtn').addEventListener('click', function() {
@@ -65,6 +67,17 @@ document.getElementById('saveTaskBtn').addEventListener('click', function() {
         // Update index.html
         updateIndexHtml(categoryId, taskDescription);
         saveTaskToLocalStorage(categoryId, taskDescription);
+
+        // Send task data to Python backend
+        fetch('/add_task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ categoryId, taskDescription })
+        }).then(response => response.json())
+          .then(data => console.log('Task added to backend:', data))
+          .catch(error => console.error('Error:', error));
     }
 });
 
@@ -77,7 +90,7 @@ function updateIndexHtml(categoryId, taskDescription) {
         'loja-boards': 'loja-card'
     };
     const cardId = categoryMap[categoryId];
-    const cardElement = window.opener ? window.opener.document.getElementById(cardId) : null;
+    const cardElement = document.getElementById(cardId);
     if (cardElement) {
         const taskElement = document.createElement('div');
         taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
@@ -85,7 +98,7 @@ function updateIndexHtml(categoryId, taskDescription) {
             ${taskDescription}
             <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
         `;
-        cardElement.querySelector('.card2').appendChild(taskElement);
+        cardElement.querySelector('.new-card-content').appendChild(taskElement);
 
         taskElement.querySelector('.noselect').addEventListener('click', function() {
             console.log(`Removing task: ${taskDescription} from index.html category: ${cardId}`);

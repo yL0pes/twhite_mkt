@@ -1,27 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded');
-    const categories = ['acoes-card', 'marketing-card', 'rh-card', 'loja-card'];
-    categories.forEach(category => {
-        console.log(`Loading tasks for category: ${category}`);
-        const tasks = JSON.parse(localStorage.getItem(category)) || [];
-        const cardElement = document.getElementById(category);
-        tasks.forEach(taskDescription => {
-            console.log(`Adding task: ${taskDescription}`);
-            const taskElement = document.createElement('div');
-            taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
-            taskElement.innerHTML = `
-                ${taskDescription}
-                <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
-            `;
-            cardElement.querySelector('.card2').appendChild(taskElement);
+    fetch('/load_tasks')
+        .then(response => response.json())
+        .then(tasks => {
+            const categoryMap = {
+                'acoes-boards': 'acoes-card',
+                'marketing-boards': 'marketing-card',
+                'rh-boards': 'rh-card',
+                'loja-boards': 'loja-card'
+            };
+            for (const [categoryId, taskDescriptions] of Object.entries(tasks)) {
+                const cardId = categoryMap[categoryId];
+                const cardElement = document.getElementById(cardId);
+                if (cardElement) {
+                    taskDescriptions.forEach(taskDescription => {
+                        const taskElement = document.createElement('div');
+                        taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        taskElement.innerHTML = `
+                            ${taskDescription}
+                            <button class="btn btn-danger btn-sm delete-task-btn">&times;</button>
+                        `;
+                        cardElement.querySelector('.card2').appendChild(taskElement);
 
-            taskElement.querySelector('.delete-task-btn').addEventListener('click', function() {
-                console.log(`Removing task: ${taskDescription}`);
-                taskElement.remove();
-                removeTaskFromLocalStorage(category, taskDescription);
-            });
-        });
-    });
+                        taskElement.querySelector('.delete-task-btn').addEventListener('click', function() {
+                            console.log(`Removing task: ${taskDescription}`);
+                            taskElement.remove();
+                            removeTaskFromLocalStorage(categoryId, taskDescription);
+                        });
+                    });
+                }
+            }
+        })
+        .catch(error => console.error('Error loading tasks:', error));
 });
 
 function removeTaskFromLocalStorage(category, taskDescription) {

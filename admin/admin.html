@@ -48,10 +48,12 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="new-card">
+                            <div class="new-card-content">
                                 <h5 class="card-title">AÇÕES</h5>
-                                <div id="acoes-boards" class="list-group"></div>
+                                <div id="acoes-boards" class="list-group">
+                                    <!-- Tasks will be dynamically added here -->
+                                </div>
                                 <button class="btn btn-outline-primary add-task-btn" data-category="acoes-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
                                 </button>
@@ -59,10 +61,12 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="new-card">
+                            <div class="new-card-content">
                                 <h5 class="card-title">MARKETING</h5>
-                                <div id="marketing-boards" class="list-group"></div>
+                                <div id="marketing-boards" class="list-group">
+                                    <!-- Tasks will be dynamically added here -->
+                                </div>
                                 <button class="btn btn-outline-primary add-task-btn" data-category="marketing-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
                                 </button>
@@ -70,10 +74,12 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="new-card">
+                            <div class="new-card-content">
                                 <h5 class="card-title">R.H</h5>
-                                <div id="rh-boards" class="list-group"></div>
+                                <div id="rh-boards" class="list-group">
+                                    <!-- Tasks will be dynamically added here -->
+                                </div>
                                 <button class="btn btn-outline-primary add-task-btn" data-category="rh-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
                                 </button>
@@ -81,10 +87,12 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
+                        <div class="new-card">
+                            <div class="new-card-content">
                                 <h5 class="card-title">LOJA</h5>
-                                <div id="loja-boards" class="list-group"></div>
+                                <div id="loja-boards" class="list-group">
+                                    <!-- Tasks will be dynamically added here -->
+                                </div>
                                 <button class="btn btn-outline-primary add-task-btn" data-category="loja-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
                                 </button>
@@ -105,17 +113,20 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="card">
-                        <div class="text-box">
-                            <div class="box-container">
-                                <textarea id="taskDescription" placeholder="Descreva a tarefa" style="width: 100%; height: 100%;"></textarea>
+                    <form id="addTaskForm">
+                        <div class="card">
+                            <div class="text-box">
+                                <div class="box-container">
+                                    <textarea id="taskDescription" name="taskDescription" placeholder="Descreva a tarefa" style="width: 100%; height: 100%;"></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveTaskBtn">Save changes</button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" id="saveTaskBtn">Save changes</button>
+                        </div>
+                        <input type="hidden" id="categoryId" name="categoryId">
+                    </form>
                 </div>
             </div>
         </div>
@@ -124,7 +135,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="admin.js"></script>
     <script>
         document.querySelector('.profile-icon').addEventListener('mouseover', function() {
             document.querySelector('.profile-options').classList.remove('d-none');
@@ -136,79 +146,40 @@
         document.querySelectorAll('.add-task-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const categoryId = this.getAttribute('data-category');
-                document.getElementById('saveTaskBtn').setAttribute('data-category', categoryId);
+                document.getElementById('categoryId').value = categoryId;
                 $('#addTaskModal').modal('show');
             });
         });
 
-        function updateIndexHtml(categoryId, taskDescription) {
-            console.log(`Updating index.html with task: ${taskDescription} for category: ${categoryId}`);
-            const categoryMap = {
-                'acoes-boards': 'acoes-card',
-                'marketing-boards': 'marketing-card',
-                'rh-boards': 'rh-card',
-                'loja-boards': 'loja-card'
-            };
-            const cardId = categoryMap[categoryId];
-            const cardElement = window.opener ? window.opener.document.getElementById(cardId) : null;
-            if (cardElement) {
-                const taskElement = document.createElement('div');
-                taskElement.className = 'list-group-item d-flex justify-content-between align-items-center';
-                taskElement.innerHTML = `
+        document.getElementById('addTaskForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const categoryId = document.getElementById('categoryId').value;
+            const taskDescription = document.getElementById('taskDescription').value;
+            if (taskDescription) {
+                const taskItem = document.createElement('div');
+                taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                taskItem.innerHTML = `
                     ${taskDescription}
                     <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
                 `;
-                cardElement.querySelector('.card2').appendChild(taskElement);
+                document.getElementById(categoryId).prepend(taskItem);
+                $('#addTaskModal').modal('hide');
 
-                taskElement.querySelector('.noselect').addEventListener('click', function() {
-                    console.log(`Removing task: ${taskDescription} from index.html category: ${cardId}`);
-                    taskElement.remove();
-                    removeTaskFromLocalStorage(cardId, taskDescription);
+                taskItem.querySelector('.noselect').addEventListener('click', function() {
+                    taskItem.remove();
                 });
-            } else {
-                console.error(`Unable to find card element for category: ${categoryId}`);
+
+                // Optionally, send task data to the backend
+                fetch('/add_task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ categoryId, taskDescription })
+                }).then(response => response.json())
+                  .then(data => console.log('Task added to backend:', data))
+                  .catch(error => console.error('Error:', error));
             }
-        }
-
-        function saveTaskToLocalStorage(categoryId, taskDescription) {
-            console.log(`Saving task: ${taskDescription} to localStorage for category: ${categoryId}`);
-            const tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
-            tasks.push(taskDescription);
-            localStorage.setItem(categoryId, JSON.stringify(tasks));
-        }
-
-        function removeTaskFromLocalStorage(categoryId, taskDescription) {
-            console.log(`Removing task: ${taskDescription} from localStorage for category: ${categoryId}`);
-            let tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
-            tasks = tasks.filter(task => task !== taskDescription);
-            localStorage.setItem(categoryId, JSON.stringify(tasks));
-        }
-
-        // Load tasks from localStorage on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Admin page loaded');
-            const categories = ['acoes-boards', 'marketing-boards', 'rh-boards', 'loja-boards'];
-            categories.forEach(categoryId => {
-                console.log(`Loading tasks for category: ${categoryId}`);
-                const tasks = JSON.parse(localStorage.getItem(categoryId)) || [];
-                const boardElement = document.getElementById(categoryId);
-                tasks.forEach(taskDescription => {
-                    console.log(`Adding task: ${taskDescription}`);
-                    const taskItem = document.createElement('div');
-                    taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    taskItem.innerHTML = `
-                        ${taskDescription}
-                        <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
-                    `;
-                    boardElement.prepend(taskItem);
-
-                    taskItem.querySelector('.noselect').addEventListener('click', function() {
-                        console.log(`Removing task: ${taskDescription}`);
-                        taskItem.remove();
-                        removeTaskFromLocalStorage(categoryId, taskDescription);
-                    });
-                });
-            });
         });
     </script>
 </body>
