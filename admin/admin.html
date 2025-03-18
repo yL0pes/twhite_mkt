@@ -57,6 +57,9 @@
                                 <button class="btn btn-outline-primary add-task-btn" data-category="acoes-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
                                 </button>
+                                <button class="btn btn-success send-tasks-btn" data-category="acoes-boards">
+                                    <i class="fas fa-paper-plane"></i> ENVIAR CARTÕES
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -69,6 +72,9 @@
                                 </div>
                                 <button class="btn btn-outline-primary add-task-btn" data-category="marketing-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
+                                </button>
+                                <button class="btn btn-success send-tasks-btn" data-category="marketing-boards">
+                                    <i class="fas fa-paper-plane"></i> ENVIAR CARTÕES
                                 </button>
                             </div>
                         </div>
@@ -83,6 +89,9 @@
                                 <button class="btn btn-outline-primary add-task-btn" data-category="rh-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
                                 </button>
+                                <button class="btn btn-success send-tasks-btn" data-category="rh-boards">
+                                    <i class="fas fa-paper-plane"></i> ENVIAR CARTÕES
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -95,6 +104,9 @@
                                 </div>
                                 <button class="btn btn-outline-primary add-task-btn" data-category="loja-boards">
                                     <i class="fas fa-plus"></i> Adicionar um cartão
+                                </button>
+                                <button class="btn btn-success send-tasks-btn" data-category="loja-boards">
+                                    <i class="fas fa-paper-plane"></i> ENVIAR CARTÕES
                                 </button>
                             </div>
                         </div>
@@ -132,54 +144,106 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        document.querySelector('.profile-icon').addEventListener('mouseover', function() {
-            document.querySelector('.profile-options').classList.remove('d-none');
-        });
-        document.querySelector('.profile-icon').addEventListener('mouseout', function() {
-            document.querySelector('.profile-options').classList.add('d-none');
-        });
+        $(document).ready(function() {
+            $('.profile-icon').on('mouseover', function() {
+                $('.profile-options').removeClass('d-none');
+            }).on('mouseout', function() {
+                $('.profile-options').addClass('d-none');
+            });
 
-        document.querySelectorAll('.add-task-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const categoryId = this.getAttribute('data-category');
-                document.getElementById('categoryId').value = categoryId;
+            $('.add-task-btn').on('click', function() {
+                const categoryId = $(this).data('category');
+                $('#categoryId').val(categoryId);
                 $('#addTaskModal').modal('show');
             });
-        });
 
-        document.getElementById('addTaskForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const categoryId = document.getElementById('categoryId').value;
-            const taskDescription = document.getElementById('taskDescription').value;
-            if (taskDescription) {
-                const taskItem = document.createElement('div');
-                taskItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                taskItem.innerHTML = `
-                    ${taskDescription}
-                    <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
-                `;
-                document.getElementById(categoryId).prepend(taskItem);
-                $('#addTaskModal').modal('hide');
+            $('#addTaskForm').on('submit', function(event) {
+                event.preventDefault();
+                const categoryId = $('#categoryId').val();
+                const taskDescription = $('#taskDescription').val();
+                if (taskDescription) {
+                    const taskItem = $(`
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            ${taskDescription}
+                            <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                        </div>
+                    `);
+                    $('#' + categoryId).prepend(taskItem);
+                    $('#addTaskModal').modal('hide');
 
-                taskItem.querySelector('.noselect').addEventListener('click', function() {
-                    taskItem.remove();
+                    taskItem.find('.noselect').on('click', function() {
+                        taskItem.remove();
+                        $.post('/delete_task', JSON.stringify({ categoryId, taskDescription }), function(data) {
+                            console.log('Task deleted from backend:', data);
+                        }).fail(function(error) {
+                            console.error('Error:', error);
+                        });
+                    });
+
+                    // Send task data to the backend
+                    $.post('/add_task', JSON.stringify({ categoryId, taskDescription }), function(data) {
+                        console.log('Task added to backend:', data);
+                    }).fail(function(error) {
+                        console.error('Error:', error);
+                    });
+                }
+            });
+
+            // Load tasks from backend on page load
+            $.get('/load_tasks', function(tasks) {
+                const categoryMap = {
+                    'acoes-boards': 'acoes-boards',
+                    'marketing-boards': 'marketing-boards',
+                    'rh-boards': 'rh-boards',
+                    'loja-boards': 'loja-boards'
+                };
+                $.each(tasks, function(categoryId, taskDescriptions) {
+                    const boardElement = $('#' + categoryId);
+                    if (boardElement.length) {
+                        $.each(taskDescriptions, function(index, taskDescription) {
+                            const taskItem = $(`
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    ${taskDescription}
+                                    <button class="noselect"><span class="text">Delete</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                                </div>
+                            `);
+                            boardElement.append(taskItem);
+
+                            taskItem.find('.noselect').on('click', function() {
+                                taskItem.remove();
+                                $.post('/delete_task', JSON.stringify({ categoryId, taskDescription }), function(data) {
+                                    console.log('Task deleted from backend:', data);
+                                }).fail(function(error) {
+                                    console.error('Error:', error);
+                                });
+                            });
+                        });
+                    }
+                });
+            }).fail(function(error) {
+                console.error('Error loading tasks:', error);
+            });
+
+            // Handle sending tasks to index.html
+            $('.send-tasks-btn').on('click', function() {
+                const categoryId = $(this).data('category');
+                const tasks = [];
+                $('#' + categoryId + ' .list-group-item').each(function() {
+                    const taskDescription = $(this).text().trim();
+                    tasks.push(taskDescription);
                 });
 
-                // Optionally, send task data to the backend
-                fetch('/add_task', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ categoryId, taskDescription })
-                }).then(response => response.json())
-                  .then(data => console.log('Task added to backend:', data))
-                  .catch(error => console.error('Error:', error));
-            }
+                // Send tasks to index.html
+                $.post('/send_tasks', JSON.stringify({ categoryId, tasks }), function(data) {
+                    console.log('Tasks sent to index.html:', data);
+                }).fail(function(error) {
+                    console.error('Error:', error);
+                });
+            });
         });
     </script>
 </body>
