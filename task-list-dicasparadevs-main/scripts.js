@@ -3,28 +3,20 @@ const addTaskButton = document.querySelector(".new-task-button");
 const categoryElement = document.querySelector(".new-task-category");
 const tasksContainer = document.querySelector(".tasks-container");
 
-const socket = io('http://localhost:3000');
+const validateInput = () => inputElement.value.trim().length > 0;
 
-const fetchTasks = async () => {
-  try {
-    const response = await fetch('http://localhost:3000/tasks');
-    const tasks = await response.json();
-    tasks.forEach(task => {
-      addTaskToDOM(task.id, task.category_id, task.task_description);
-    });
-  } catch (error) {
-    console.error('Error fetching tasks:', error);
+const handleAddTask = () => {
+  const inputIsValid = validateInput();
+
+  if (!inputIsValid) {
+    return inputElement.classList.add("error");
   }
-};
 
-const addTaskToDOM = (id, category_id, task_description) => {
   const taskItemContainer = document.createElement("div");
   taskItemContainer.classList.add("task-item");
-  taskItemContainer.dataset.id = id;
-  taskItemContainer.dataset.category = category_id;
 
   const taskContent = document.createElement("p");
-  taskContent.innerText = task_description;
+  taskContent.innerText = inputElement.value;
 
   taskContent.addEventListener("click", () => handleClick(taskContent));
 
@@ -33,7 +25,7 @@ const addTaskToDOM = (id, category_id, task_description) => {
 
   const deleteItemInput = document.createElement("input");
   deleteItemInput.classList.add("custom-checkbox-input");
-  deleteItemInput.id = `checkbox-${id}`;
+  deleteItemInput.id = `checkbox-${Date.now()}`;
   deleteItemInput.type = "checkbox";
 
   const deleteItemLabel = document.createElement("label");
@@ -47,52 +39,26 @@ const addTaskToDOM = (id, category_id, task_description) => {
   deleteItemContainer.appendChild(deleteItemInput);
   deleteItemContainer.appendChild(deleteItemLabel);
 
+  const category = categoryElement.value || "general";
+  taskItemContainer.dataset.category = category;
+
   const categoryLabel = document.createElement("span");
   categoryLabel.classList.add("task-category");
-  categoryLabel.innerText = `[${category_id}] `;
+  categoryLabel.innerText = `[${category}] `;
 
   taskItemContainer.appendChild(categoryLabel);
   taskItemContainer.appendChild(taskContent);
   taskItemContainer.appendChild(deleteItemContainer);
 
-  const categoryContainer = document.getElementById(`${category_id.toLowerCase()}-tasks`);
-  categoryContainer.appendChild(taskItemContainer);
-};
-
-const validateInput = () => inputElement.value.trim().length > 0;
-
-const handleAddTask = async () => {
-  const inputIsValid = validateInput();
-
-  if (!inputIsValid) {
-    return inputElement.classList.add("error");
-  }
-
-  const category_id = categoryElement.value;
-  const task_description = inputElement.value;
-
-  try {
-    const response = await fetch('http://localhost:3000/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ category_id, task_description })
-    });
-
-    if (response.ok) {
-      const newTask = await response.json();
-      addTaskToDOM(newTask.id, category_id, task_description);
-    }
-  } catch (error) {
-    console.error('Error adding task:', error);
-  }
+  tasksContainer.appendChild(taskItemContainer);
 
   inputElement.value = "";
+
+  updateLocalStorage();
 };
 
 const handleClick = (taskContent) => {
-  const tasks = document.querySelectorAll(".task-item");
+  const tasks = tasksContainer.childNodes;
 
   for (const task of tasks) {
     const currentTaskIsBeingClicked = task.querySelector("p").isSameNode(taskContent);
@@ -101,22 +67,22 @@ const handleClick = (taskContent) => {
       task.querySelector("p").classList.toggle("completed");
     }
   }
+
+  updateLocalStorage();
 };
 
-const handleDeleteClick = async (taskItemContainer, taskContent) => {
-  const taskId = taskItemContainer.dataset.id;
+const handleDeleteClick = (taskItemContainer, taskContent) => {
+  const tasks = tasksContainer.childNodes;
 
-  try {
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: 'DELETE'
-    });
+  for (const task of tasks) {
+    const currentTaskIsBeingClicked = task.querySelector("p").isSameNode(taskContent);
 
-    if (response.ok) {
+    if (currentTaskIsBeingClicked) {
       taskItemContainer.remove();
     }
-  } catch (error) {
-    console.error('Error deleting task:', error);
   }
+
+  updateLocalStorage();
 };
 
 const handleInputChange = () => {
@@ -127,19 +93,72 @@ const handleInputChange = () => {
   }
 };
 
-socket.on('newTask', (task) => {
-  addTaskToDOM(task.id, task.category_id, task.task_description);
-});
+const updateLocalStorage = () => {
+  const tasks = document.querySelectorAll(".task-item");
 
-socket.on('deleteTask', (id) => {
-  const taskItemContainer = document.querySelector(`.task-item[data-id='${id}']`);
-  if (taskItemContainer) {
-    taskItemContainer.remove();
+  const localStorageTasks = [...tasks].map((task) => {
+    const content = task.querySelector("p");
+    const isCompleted = content.classList.contains("completed");
+    const category = task.dataset.category;
+
+    return { description: content.innerText, isCompleted, category };
+  });
+
+  localStorage.setItem("tasks", JSON.stringify(localStorageTasks));
+};
+
+const refreshTasksUsingLocalStorage = () => {
+  const tasksFromLocalStorage = JSON.parse(localStorage.getItem("tasks"));
+
+  if (!tasksFromLocalStorage) return;
+
+  for (const task of tasksFromLocalStorage) {
+    const taskItemContainer = document.createElement("div");
+    taskItemContainer.classList.add("task-item");
+    taskItemContainer.dataset.category = task.category;
+
+    const taskContent = document.createElement("p");
+    taskContent.innerText = task.description;
+
+    if (task.isCompleted) {
+      taskContent.classList.add("completed");
+    }
+
+    taskContent.addEventListener("click", () => handleClick(taskContent));
+
+    const deleteItemContainer = document.createElement("div");
+    deleteItemContainer.classList.add("custom-checkbox-container");
+
+    const deleteItemInput = document.createElement("input");
+    deleteItemInput.classList.add("custom-checkbox-input");
+    deleteItemInput.id = `checkbox-${Date.now()}`;
+    deleteItemInput.type = "checkbox";
+
+    const deleteItemLabel = document.createElement("label");
+    deleteItemLabel.classList.add("custom-checkbox-label");
+    deleteItemLabel.setAttribute("for", deleteItemInput.id);
+
+    deleteItemInput.addEventListener("change", () =>
+      handleDeleteClick(taskItemContainer, taskContent)
+    );
+
+    deleteItemContainer.appendChild(deleteItemInput);
+    deleteItemContainer.appendChild(deleteItemLabel);
+
+    const categoryLabel = document.createElement("span");
+    categoryLabel.classList.add("task-category");
+    categoryLabel.innerText = `[${task.category}] `;
+
+    taskItemContainer.appendChild(categoryLabel);
+    taskItemContainer.appendChild(taskContent);
+    taskItemContainer.appendChild(deleteItemContainer);
+
+    tasksContainer.appendChild(taskItemContainer);
   }
-});
+};
 
-fetchTasks();
+refreshTasksUsingLocalStorage();
 
-addTaskButton.addEventListener("click", handleAddTask);
+addTaskButton.addEventListener("click", () => handleAddTask());
 
-inputElement.addEventListener("input", handleInputChange);
+inputElement.addEventListener("change", () => handleInputChange());

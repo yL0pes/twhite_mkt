@@ -11,33 +11,39 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="container">
+    <div class="container mt-5">
       <div class="new-task-container">
         <input
           type="text"
-          class="new-task-input"
+          class="new-task-input form-control"
           placeholder="Tarefa para ser feita..."
         />
-        <select class="new-task-category">
+        <select class="new-task-category form-control ml-2">
           <option value="AÇÕES">AÇÕES</option>
           <option value="MARKETING">MARKETING</option>
           <option value="R.H">R.H</option>
           <option value="LOJA">LOJA</option>
         </select>
-        <button class="new-task-button">Adicionar</button>
+        <button class="new-task-button btn btn-success ml-2">Adicionar</button>
       </div>
 
-      <div class="tasks-container"></div>
+      <div class="tasks-container mt-4"></div>
     </div>
 
     <script
       src="https://kit.fontawesome.com/f9e19193d6.js"
       crossorigin="anonymous"
     ></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="./scripts.js"></script>
   </body>
 </html>

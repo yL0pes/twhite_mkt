@@ -9,8 +9,8 @@ body {
   height: 100vh;
   background: linear-gradient(
     90deg,
-    rgb(65, 184, 75) 0%,
-    rgb(25, 204, 70) 100%
+    rgb(69, 184, 65) 0%,
+    rgb(22, 204, 37) 100%
   );
   display: flex;
   align-items: center;
@@ -19,8 +19,8 @@ body {
 
 .container {
   padding: 30px 40px;
-  width: 40%;
-  min-width: 500px;
+  width: 100%;
+  max-width: 600px;
 }
 
 .new-task-container {
@@ -29,44 +29,28 @@ body {
   border-radius: 5px;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-wrap: wrap;
+}
+
+.new-task-container input,
+.new-task-container select,
+.new-task-button {
+  flex: 1;
+  margin-bottom: 10px;
 }
 
 .new-task-container input {
   flex: 3;
-  font-size: 1rem;
-  border: 2px solid #d1d3d4;
-  border-radius: 5px;
-  padding: 12px;
-  font-weight: 500;
-}
-
-.new-task-container input:focus {
-  outline: none;
-  border-color: #41b883;
 }
 
 .new-task-container select {
   flex: 1;
-  font-size: 1rem;
-  border: 2px solid #d1d3d4;
-  border-radius: 5px;
-  padding: 12px;
-  font-weight: 500;
   margin-left: 12px;
 }
 
 .new-task-button {
   flex: 1;
-  border-radius: 5px;
-  font-weight: 500;
-  height: 100%;
-  font-size: 1rem;
-  border: none;
-  background-color: #41b883;
-  color: #fff;
-  padding: 12px;
   margin-left: 12px;
-  cursor: pointer;
 }
 
 .tasks-container {

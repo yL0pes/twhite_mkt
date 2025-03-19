@@ -6,29 +6,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Categorias - Lista de Tarefas</title>
     <link rel="stylesheet" href="./styles.css" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div>
       <img class="logo-img" src="./tw.png"/>
     </div>
-    <div class="container">
-      <div class="tasks-container" id="geral-tasks">
+    <div class="container mt-5">
+      <div class="tasks-container" id="general-tasks">
         <h2>GERAL</h2>
       </div>
-      <div class="tasks-container" id="acoes-tasks">
+      <div class="tasks-container" id="work-tasks">
         <h2>AÇÕES</h2>
+        <div contenteditable="true" class="editable-content">
+          Nome locutor 1<br><br>
+          PRODUTOS - Rel | Pul | Pel | Game<br>
+          VENDEDOR 1 - <br>
+          VENDEDOR 2 - <br>
+          VENDEDOR 3 - <br><br>
+          TOTAL: <br><br>
+          Dinheiro Vendedor 1 = <br>
+          Dinheiro Vendedor 2 = <br>
+          Dinheiro Vendedor 3 = <br><br>
+          Pix Vendedor 1 = <br>
+          Pix Vendedor 2 = <br><br>
+          ---------------------------------------------------------------------------<br><br>
+          Nome locutor 2 [se houver]<br><br>
+          PRODUTOS - Rel | Pul | Pel | Game<br>
+          VENDEDOR 1 - <br>
+          VENDEDOR 2 - <br>
+          VENDEDOR 3 - <br><br>
+          TOTAL: <br><br>
+          Dinheiro Vendedor 1 = <br>
+          Dinheiro Vendedor 2 = <br>
+          Dinheiro Vendedor 3 = <br><br>
+          Pix Vendedor 1 = <br>
+          Pix Vendedor 2 = <br><br>
+          /////////////////////////////////////////////////////////<br><br>
+          VENDAS TWHITE WAVE<br><br>
+          ESTER = <br>
+          SABRINA = <br>
+          STEFANI = <br>
+          JULIANA = <br><br>
+          TOTAL = <br><br>
+          /////////////////////////////////////////////////////////<br>
+        </div>
       </div>
-      <div class="tasks-container" id="marketing-tasks">
+      <div class="tasks-container" id="personal-tasks">
         <h2>MARKETING</h2>
       </div>
-      <div class="tasks-container" id="rh-tasks">
+      <div class="tasks-container" id="shopping-tasks">
         <h2>R.H</h2>
       </div>
-      <div class="tasks-container" id="loja-tasks">
+      <div class="tasks-container" id="others-tasks">
         <h2>LOJA</h2>
       </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="./scripts.js"></script>
+    <script>
+      const tasksFromLocalStorage = JSON.parse(localStorage.getItem("tasks"));
+
+      if (tasksFromLocalStorage) {
+        tasksFromLocalStorage.forEach((task) => {
+          const taskItemContainer = document.createElement("div");
+          taskItemContainer.classList.add("task-item");
+
+          const taskContent = document.createElement("p");
+          taskContent.innerText = task.description;
+
+          if (task.isCompleted) {
+            taskContent.classList.add("completed");
+          }
+
+          const categoryLabel = document.createElement("span");
+          categoryLabel.classList.add("task-category");
+          categoryLabel.innerText = `[${task.category}] `;
+
+          taskItemContainer.appendChild(categoryLabel);
+          taskItemContainer.appendChild(taskContent);
+
+          const deleteItem = document.createElement("i");
+          deleteItem.classList.add("far");
+          deleteItem.classList.add("fa-trash-alt");
+
+          taskItemContainer.appendChild(deleteItem);
+
+          const categoryContainer = document.getElementById(`${task.category}-tasks`);
+          categoryContainer.appendChild(taskItemContainer);
+        });
+      }
+    </script>
   </body>
 </html>
