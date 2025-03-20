@@ -20,24 +20,12 @@ const handleAddTask = () => {
 
   taskContent.addEventListener("click", () => handleClick(taskContent));
 
-  const deleteItemContainer = document.createElement("div");
-  deleteItemContainer.classList.add("custom-checkbox-container");
-
-  const deleteItemInput = document.createElement("input");
-  deleteItemInput.classList.add("custom-checkbox-input");
-  deleteItemInput.id = `checkbox-${Date.now()}`;
-  deleteItemInput.type = "checkbox";
-
-  const deleteItemLabel = document.createElement("label");
-  deleteItemLabel.classList.add("custom-checkbox-label");
-  deleteItemLabel.setAttribute("for", deleteItemInput.id);
-
-  deleteItemInput.addEventListener("change", () =>
+  const deleteItem = document.createElement("i");
+  deleteItem.classList.add("far");
+  deleteItem.classList.add("fa-trash-alt");
+  deleteItem.addEventListener("click", () =>
     handleDeleteClick(taskItemContainer, taskContent)
   );
-
-  deleteItemContainer.appendChild(deleteItemInput);
-  deleteItemContainer.appendChild(deleteItemLabel);
 
   const category = categoryElement.value || "general";
   taskItemContainer.dataset.category = category;
@@ -48,7 +36,7 @@ const handleAddTask = () => {
 
   taskItemContainer.appendChild(categoryLabel);
   taskItemContainer.appendChild(taskContent);
-  taskItemContainer.appendChild(deleteItemContainer);
+  taskItemContainer.appendChild(deleteItem);
 
   tasksContainer.appendChild(taskItemContainer);
 
@@ -126,24 +114,12 @@ const refreshTasksUsingLocalStorage = () => {
 
     taskContent.addEventListener("click", () => handleClick(taskContent));
 
-    const deleteItemContainer = document.createElement("div");
-    deleteItemContainer.classList.add("custom-checkbox-container");
-
-    const deleteItemInput = document.createElement("input");
-    deleteItemInput.classList.add("custom-checkbox-input");
-    deleteItemInput.id = `checkbox-${Date.now()}`;
-    deleteItemInput.type = "checkbox";
-
-    const deleteItemLabel = document.createElement("label");
-    deleteItemLabel.classList.add("custom-checkbox-label");
-    deleteItemLabel.setAttribute("for", deleteItemInput.id);
-
-    deleteItemInput.addEventListener("change", () =>
+    const deleteItem = document.createElement("i");
+    deleteItem.classList.add("far");
+    deleteItem.classList.add("fa-trash-alt");
+    deleteItem.addEventListener("click", () =>
       handleDeleteClick(taskItemContainer, taskContent)
     );
-
-    deleteItemContainer.appendChild(deleteItemInput);
-    deleteItemContainer.appendChild(deleteItemLabel);
 
     const categoryLabel = document.createElement("span");
     categoryLabel.classList.add("task-category");
@@ -151,7 +127,7 @@ const refreshTasksUsingLocalStorage = () => {
 
     taskItemContainer.appendChild(categoryLabel);
     taskItemContainer.appendChild(taskContent);
-    taskItemContainer.appendChild(deleteItemContainer);
+    taskItemContainer.appendChild(deleteItem);
 
     tasksContainer.appendChild(taskItemContainer);
   }
