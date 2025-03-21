@@ -52,7 +52,7 @@
         <h2>AÇÕES</h2>
       </div>
       <div class="tasks-container" id="acoes-content-container">
-        <div contenteditable="true" class="editable-content" id="acoes-content">
+        <div contenteditable="true" class="editable-content text-center" id="acoes-content">
           AÇÕES DE VENDAS // VENDAS DO DIA e VENDAS TWHITE WAVE<br><br>
           LOCUÇÃO [DIA DA SEMANA] [DIA e MÊS]<br><br>
           Nome locutor 1<br><br>
@@ -87,7 +87,10 @@
           TOTAL = <br><br>
           /////////////////////////////////////////////////////////<br>
         </div>
-        <button id="toggle-animation" class="btn btn-primary mt-3">Pause Animation</button>
+      </div>
+      <div class="text-center mt-3">
+        <button id="toggle-animation" class="btn btn-primary">Start Animation</button>
+        <button id="save-content" class="btn btn-secondary ml-2">Atualizar Informações</button>
       </div>
       <div class="tasks-container" id="MARKETING-tasks">
         <h2>MARKETING</h2>
@@ -98,55 +101,49 @@
       <div class="tasks-container" id="LOJA-tasks">
         <h2>LOJA</h2>
       </div>
+      <div class="animation-container">
+        <div class="animated-content">
+          <!-- Add your animated content here -->
+          <p>Animated content goes here...</p>
+        </div>
+      </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="./scripts.js"></script>
     <script>
-      const tasksFromLocalStorage = JSON.parse(localStorage.getItem("tasks"));
-
-      if (tasksFromLocalStorage) {
-        tasksFromLocalStorage.forEach((task) => {
-          const taskItemContainer = document.createElement("div");
-          taskItemContainer.classList.add("task-item");
-
-          const taskContent = document.createElement("p");
-          taskContent.innerText = task.description;
-
-          if (task.isCompleted) {
-            taskContent.classList.add("completed");
-          }
-
-          const categoryLabel = document.createElement("span");
-          categoryLabel.classList.add("task-category");
-          categoryLabel.innerText = `[${task.category}] `;
-
-          taskItemContainer.appendChild(categoryLabel);
-          taskItemContainer.appendChild(taskContent);
-
-          const categoryContainer = document.getElementById(`${task.category}-tasks`);
-          categoryContainer.appendChild(taskItemContainer);
-
-          // Add to general tasks as well
-          const generalContainer = document.getElementById("general-tasks");
-          generalContainer.appendChild(taskItemContainer.cloneNode(true));
-        });
-      }
-
-      const toggleButton = document.getElementById("toggle-animation");
-      const acoesContent = document.getElementById("acoes-content");
-      let isPaused = false;
-
-      toggleButton.addEventListener("click", () => {
-        if (isPaused) {
-          acoesContent.style.animationPlayState = "running";
-          toggleButton.textContent = "Pause Animation";
-        } else {
-          acoesContent.style.animationPlayState = "paused";
-          toggleButton.textContent = "Resume Animation";
+      document.addEventListener('DOMContentLoaded', (event) => {
+        const acoesContent = document.getElementById('acoes-content');
+        const savedContent = localStorage.getItem('acoesContent');
+        if (savedContent) {
+          acoesContent.innerHTML = savedContent;
         }
-        isPaused = !isPaused;
+
+        acoesContent.addEventListener('input', () => {
+          localStorage.setItem('acoesContent', acoesContent.innerHTML);
+        });
+
+        const saveButton = document.getElementById('save-content');
+        saveButton.addEventListener('click', () => {
+          localStorage.setItem('acoesContent', acoesContent.innerHTML);
+          alert('Informações atualizadas!');
+        });
+
+        const toggleButton = document.getElementById("toggle-animation");
+        let isPaused = true;
+
+        toggleButton.addEventListener("click", () => {
+          const animatedContent = document.querySelector('.animated-content');
+          if (isPaused) {
+            animatedContent.style.animationPlayState = "running";
+            toggleButton.textContent = "Pause Animation";
+          } else {
+            animatedContent.style.animationPlayState = "paused";
+            toggleButton.textContent = "Start Animation";
+          }
+          isPaused = !isPaused;
+        });
       });
     </script>
   </body>

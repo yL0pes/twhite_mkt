@@ -23,7 +23,7 @@
         <input
           type="text"
           class="new-task-input form-control"
-          placeholder="Tarefa para ser feita..."
+          placeholder="Tarefa para ser feita..."  
         />
         <select class="new-task-category form-control ml-2">
           <option value="AÇÕES">AÇÕES</option>
@@ -34,7 +34,6 @@
         <button class="new-task-button btn btn-success ml-2">Adicionar</button>
       </div>
 
-      <div class="tasks-container mt-4"></div>
     </div>
 
     <script
@@ -45,5 +44,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="./scripts.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        const acoesContent = document.getElementById('acoes-content');
+        const savedContent = localStorage.getItem('acoesContent');
+        if (savedContent) {
+          acoesContent.innerHTML = savedContent;
+        }
+
+        acoesContent.addEventListener('input', () => {
+          localStorage.setItem('acoesContent', acoesContent.innerHTML);
+        });
+      });
+    </script>
   </body>
 </html>
