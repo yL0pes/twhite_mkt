@@ -53,39 +53,20 @@
       </div>
       <div class="tasks-container" id="acoes-content-container">
         <div contenteditable="true" class="editable-content text-center" id="acoes-content">
-          AÇÕES DE VENDAS // VENDAS DO DIA e VENDAS TWHITE WAVE<br><br>
-          LOCUÇÃO [DIA DA SEMANA] [DIA e MÊS]<br><br>
-          Nome locutor 1<br><br>
-          PRODUTOS - Rel | Pul | Pel | Game<br>
-          VENDEDOR 1 - <br>
-          VENDEDOR 2 -<br>
-          VENDEDOR 3 -<br><br>
-          TOTAL: <br><br>
-          Dinheiro Vendedor 1 = <br>
-          Dinheiro Vendedor 2 =<br>
-          Dinheiro Vendedor 3 =<br><br>
-          Pix Vendedor 1 =<br>
-          Pix Vendedor 2 =<br><br>
-          ---------------------------------------------------------------------------<br><br>
-          Nome locutor 2 [se houver]<br><br>
-          PRODUTOS - Rel | Pul | Pel | Game<br>
-          VENDEDOR 1 - <br>
-          VENDEDOR 2 -<br>
-          VENDEDOR 3 -<br><br>
-          TOTAL: <br><br>
-          Dinheiro Vendedor 1 = <br>
-          Dinheiro Vendedor 2 =<br>
-          Dinheiro Vendedor 3 =<br><br>
-          Pix Vendedor 1 =<br>
-          Pix Vendedor 2 =<br><br>
-          /////////////////////////////////////////////////////////<br><br>
-          VENDAS TWHITE WAVE<br><br>
-          ESTER = <br>
-          SABRINA = <br>
-          STEFANI = <br>
-          JULIANA = <br><br>
-          TOTAL = <br><br>
-          /////////////////////////////////////////////////////////<br>
+          Locução 20/03<br><br>
+          Locução Felipe<br><br>
+          Cristal Quinta<br><br>
+          Rel | Pul | Pel | Game<br>
+          Alexa 02| 01| 02| 00<br>
+          Stefani 01| 01| 01| 00<br>
+          Sabrina 06| 00|00|00<br><br>
+          Total 09| 02| 03| 00<br><br>
+          Dinheiro Stefani<br>
+          Dinheiro Alexa<br>
+          Dinheiro Sabrina<br><br>
+          Pix Stefani<br>
+          Pix Alexa<br>
+          Pix Sabrina 02
         </div>
       </div>
       <div class="text-center mt-3">
@@ -100,12 +81,6 @@
       </div>
       <div class="tasks-container" id="LOJA-tasks">
         <h2>LOJA</h2>
-      </div>
-      <div class="animation-container">
-        <div class="animated-content">
-          <!-- Add your animated content here -->
-          <p>Animated content goes here...</p>
-        </div>
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -132,14 +107,19 @@
 
         const toggleButton = document.getElementById("toggle-animation");
         let isPaused = true;
+        let scrollInterval;
 
         toggleButton.addEventListener("click", () => {
-          const animatedContent = document.querySelector('.animated-content');
           if (isPaused) {
-            animatedContent.style.animationPlayState = "running";
+            scrollInterval = setInterval(() => {
+              acoesContent.scrollTop += 1;
+              if (acoesContent.scrollTop + acoesContent.clientHeight >= acoesContent.scrollHeight) {
+                acoesContent.scrollTop = 0;
+              }
+            }, 50);
             toggleButton.textContent = "Pause Animation";
           } else {
-            animatedContent.style.animationPlayState = "paused";
+            clearInterval(scrollInterval);
             toggleButton.textContent = "Start Animation";
           }
           isPaused = !isPaused;
